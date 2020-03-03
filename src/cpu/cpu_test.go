@@ -43,7 +43,7 @@ func TestCPUHasInitializedFlags(t *testing.T) {
 
 func TestLoadImmediateAccumulator(t *testing.T) {
 	c := Make()
-	c.LoadImmediateA(5)
+	c.LoadImmediateA(0x05)
 	if c.a != 5 {
 		t.Fatal("Accumulator should have value 5")
 	}
@@ -51,7 +51,7 @@ func TestLoadImmediateAccumulator(t *testing.T) {
 
 func TestLoadImmediateX(t *testing.T) {
 	c := Make()
-	c.LoadImmediateX(7)
+	c.LoadImmediateX(0x07)
 	if c.x != 7 {
 		t.Fatal("Register X should have value 7")
 	}
@@ -59,7 +59,7 @@ func TestLoadImmediateX(t *testing.T) {
 
 func TestLoadImmediateY(t *testing.T) {
 	c := Make()
-	c.LoadImmediateY(10)
+	c.LoadImmediateY(0x0A)
 	if c.y != 10 {
 		t.Fatal("Register Y should have value 10")
 	}
