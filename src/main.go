@@ -1,7 +1,8 @@
 package main
 
-import "fmt"
+import "./repl"
 
 func main() {
-	fmt.Println("-- MOS 6502 virtual machine --")
+	repl := repl.Make(2)
+	repl.Run()
 }

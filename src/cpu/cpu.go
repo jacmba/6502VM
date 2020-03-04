@@ -87,3 +87,11 @@ func (c *CPU) getNextByte() byte {
 	c.pc++
 	return b
 }
+
+/*
+RunOnce - Runs one iteration resetting PC to 0x00
+*/
+func (c *CPU) RunOnce() {
+	c.pc = 0
+	c.exec()
+}

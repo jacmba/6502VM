@@ -33,3 +33,10 @@ ReadByte returns value from given address
 func (m *Mem) ReadByte(address uint16) byte {
 	return m.table[address]
 }
+
+/*
+Dump returns complete array of memory
+*/
+func (m *Mem) Dump() []byte {
+	return m.table
+}
