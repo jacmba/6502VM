@@ -1,8 +1,10 @@
 package main
 
-import "./repl"
+import (
+	"./repl"
+)
 
 func main() {
-	repl := repl.Make(2)
+	repl := repl.Make(64)
 	repl.Run()
 }

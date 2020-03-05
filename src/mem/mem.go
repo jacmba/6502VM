@@ -15,8 +15,14 @@ const (
 Make creates a memory instance with given memory in KBs
 */
 func Make(size uint16) *Mem {
+	if size == 0 {
+		panic("Memory must have at least 1K!")
+	}
+	if size > 64 {
+		panic("Memory cannot have more than 64K!")
+	}
 	return &Mem{
-		table: make([]byte, size*kb),
+		table: make([]byte, int(size)*kb),
 	}
 }
 
