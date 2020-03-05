@@ -6,6 +6,14 @@ import (
 	"../mem"
 )
 
+const (
+	pageZeroBegin = 0x0000
+	pageZeroEnd   = 0x00FF
+	pageOneBegin  = 0x0100
+	pageOneEnd    = 0x01FF
+	pageTwoBegin  = 0x0200
+)
+
 /*
 CPU Data structure to hold CPU registers and flags
 */
@@ -13,8 +21,8 @@ type CPU struct {
 	x   byte     // X general purpose register
 	y   byte     // Y general purpose register
 	a   byte     // Accumulator register
-	s   byte     // Stack Pointer register
 	p   byte     // CPU flags register
+	s   uint16   // Stack Pointer register
 	irq uint16   // Interrupt routine address
 	pc  uint16   // Program Counter
 	mem *mem.Mem // Access to RAM memory
@@ -28,10 +36,10 @@ func Make(mem *mem.Mem) *CPU {
 		x:   0,
 		y:   0,
 		a:   0,
-		s:   0,
+		s:   pageOneBegin,
 		p:   0,
 		irq: 0,
-		pc:  0,
+		pc:  pageTwoBegin,
 		mem: mem,
 	}
 }
@@ -92,6 +100,6 @@ func (c *CPU) getNextByte() byte {
 RunOnce - Runs one iteration resetting PC to 0x00
 */
 func (c *CPU) RunOnce() {
-	c.pc = 0
+	c.pc = pageTwoBegin
 	c.exec()
 }

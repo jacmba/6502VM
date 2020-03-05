@@ -51,13 +51,25 @@ func (repl *REPL) Run() {
 
 		switch input {
 		case "memdump":
-			fmt.Println("Printing VM memory dump")
+			fmt.Println("===== Printing VM memory dump =====")
 			fmt.Printf("%+v\n", repl.mem.Dump())
-			fmt.Println("End of VM memory dump")
+			fmt.Println("===== End of VM memory dump =====")
 		case "cpudump":
-			fmt.Println("Printing CPU dump")
+			fmt.Println("===== Printing CPU dump =====")
 			fmt.Printf("%+v\n", repl.cpu)
-			fmt.Println("End of CPU dump")
+			fmt.Println("===== End of CPU dump =====")
+		case "pagezerodump":
+			fmt.Println("===== Printing Page ZERO dump =====")
+			fmt.Printf("%+v\n", repl.mem.Dump()[:0xFF])
+			fmt.Println("===== End of page ZERO dump =====")
+		case "stackdump":
+			fmt.Println("===== Printing STACK (Page 1) dump =====")
+			fmt.Printf("%+v\n", repl.mem.Dump()[0x100:0x200])
+			fmt.Println("===== End of STACK (Page 1) dump =====")
+		case "programdump":
+			fmt.Println("===== Printing Program dump =====")
+			fmt.Printf("%+v\n", repl.mem.Dump()[0x200:])
+			fmt.Println("===== End of Program dump =====")
 		case "quit":
 			println("Bye!")
 			os.Exit(0)
@@ -65,11 +77,12 @@ func (repl *REPL) Run() {
 			inputBytes := strings.Split(input, " ")
 			bytes, err := hex.DecodeString(strings.Join(inputBytes, ""))
 			if err != nil {
-				panic(err)
+				fmt.Println("Unknown operation!")
+				continue
 			}
 
 			for i, b := range bytes {
-				repl.mem.SetByte(uint16(i), b)
+				repl.mem.SetByte(0x200+uint16(i), b)
 			}
 
 			repl.cpu.RunOnce()
