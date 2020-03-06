@@ -63,6 +63,16 @@ func TestLoadZeroPageA(t *testing.T) {
 	}
 }
 
+func TestLoadAbsoluteA(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x0300, 0xAA)
+	c.LoadAbsoluteA(0x300)
+	if c.a != 0xAA {
+		t.Fatal("Accumulator should have value 0xAA")
+	}
+}
+
 func TestLoadImmediateX(t *testing.T) {
 	c := Make(nil)
 	c.LoadImmediateX(0x07)
@@ -81,6 +91,16 @@ func TestLoadZeroPageX(t *testing.T) {
 	}
 }
 
+func TestLoadAbsoluteX(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x301, 0xAB)
+	c.LoadAbsoluteX(0x301)
+	if c.x != 0xAB {
+		t.Fatal("Register X should have value 0xAB")
+	}
+}
+
 func TestLoadImmediateY(t *testing.T) {
 	c := Make(nil)
 	c.LoadImmediateY(0x0A)
@@ -96,6 +116,16 @@ func TestLoadZeroPageY(t *testing.T) {
 	c.LoadZeroPageY(0x0C)
 	if c.y != 0xDB {
 		t.Fatal("Register Y should have value 0xDB")
+	}
+}
+
+func TestLoadAbsoluteY(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x302, 0xAC)
+	c.LoadAbsoluteY(0x302)
+	if c.y != 0xAC {
+		t.Fatal("Register Y should have value 0xAC")
 	}
 }
 
