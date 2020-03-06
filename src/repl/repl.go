@@ -58,7 +58,7 @@ func (repl *REPL) Run() {
 			fmt.Println("===== Printing CPU dump =====")
 			fmt.Printf("%+v\n", repl.cpu)
 			fmt.Println("===== End of CPU dump =====")
-		case "pagezerodump":
+		case "zeropagedump":
 			fmt.Println("===== Printing Page ZERO dump =====")
 			fmt.Printf("%+v\n", repl.mem.Dump()[:0xFF])
 			fmt.Println("===== End of page ZERO dump =====")

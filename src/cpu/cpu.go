@@ -52,6 +52,13 @@ func (c *CPU) LoadImmediateA(b byte) {
 }
 
 /*
+LoadZeroPageA loads accoumulator from zero page address
+*/
+func (c *CPU) LoadZeroPageA(b byte) {
+	c.a = c.mem.ReadByte(uint16(b))
+}
+
+/*
 LoadImmediateX sets numeric value into index register X
 */
 func (c *CPU) LoadImmediateX(b byte) {
@@ -59,10 +66,24 @@ func (c *CPU) LoadImmediateX(b byte) {
 }
 
 /*
+LoadZeroPageX sets in register X value from zero page address
+*/
+func (c *CPU) LoadZeroPageX(b byte) {
+	c.x = c.mem.ReadByte(uint16(b))
+}
+
+/*
 LoadImmediateY sets numeric value into index register Y
 */
 func (c *CPU) LoadImmediateY(b byte) {
 	c.y = b
+}
+
+/*
+LoadZeroPageY sets in register Y value from zero page address
+*/
+func (c *CPU) LoadZeroPageY(b byte) {
+	c.y = c.mem.ReadByte(uint16(b))
 }
 
 /*
@@ -82,6 +103,15 @@ func (c *CPU) exec() {
 	case OpLoadYI:
 		val := c.getNextByte()
 		c.LoadImmediateY(val)
+	case OpLoadAZP:
+		val := c.getNextByte()
+		c.LoadZeroPageA(val)
+	case OpLoadXZP:
+		val := c.getNextByte()
+		c.LoadZeroPageX(val)
+	case OpLoadYZP:
+		val := c.getNextByte()
+		c.LoadZeroPageY(val)
 	default:
 		panic(fmt.Sprintf("Invalid opcode [%#X] found at %#X!!", opcode, currentPos))
 	}

@@ -53,6 +53,16 @@ func TestLoadImmediateAccumulator(t *testing.T) {
 	}
 }
 
+func TestLoadZeroPageA(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x0A, 0xEA)
+	c.LoadZeroPageA(0x0A)
+	if c.a != 0xEA {
+		t.Fatal("Accumulator should have value 0xEA")
+	}
+}
+
 func TestLoadImmediateX(t *testing.T) {
 	c := Make(nil)
 	c.LoadImmediateX(0x07)
@@ -61,11 +71,31 @@ func TestLoadImmediateX(t *testing.T) {
 	}
 }
 
+func TestLoadZeroPageX(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x0B, 0xAD)
+	c.LoadZeroPageX(0x0B)
+	if c.x != 0xAD {
+		t.Fatal("Register X should have value 0xAD")
+	}
+}
+
 func TestLoadImmediateY(t *testing.T) {
 	c := Make(nil)
 	c.LoadImmediateY(0x0A)
 	if c.y != 10 {
 		t.Fatal("Register Y should have value 10")
+	}
+}
+
+func TestLoadZeroPageY(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x0C, 0xDB)
+	c.LoadZeroPageY(0x0C)
+	if c.y != 0xDB {
+		t.Fatal("Register Y should have value 0xDB")
 	}
 }
 
@@ -83,6 +113,18 @@ func TestLoadImmediateAOpcodeExecution(t *testing.T) {
 	}
 }
 
+func TestLoadZeroPageAOpcodeExecution(t *testing.T) {
+	mem := mem.Make(1)
+	c := Make(mem)
+	mem.SetByte(0x200, 0xA5)
+	mem.SetByte(0x201, 0xBB)
+	mem.SetByte(0xBB, 0xFA)
+	c.exec()
+	if c.a != 0xFA {
+		t.Fatal("Accumulator should have value 0xFA")
+	}
+}
+
 func TestLoadImmediateXOpcodeExecution(t *testing.T) {
 	mem := mem.Make(1)
 	c := Make(mem)
@@ -97,6 +139,18 @@ func TestLoadImmediateXOpcodeExecution(t *testing.T) {
 	}
 }
 
+func TestLoadZeropageXOpcodeExecution(t *testing.T) {
+	mem := mem.Make(1)
+	c := Make(mem)
+	mem.SetByte(0x200, 0xA6)
+	mem.SetByte(0x201, 0xAA)
+	mem.SetByte(0xAA, 0xAC)
+	c.exec()
+	if c.x != 0xAC {
+		t.Fatal("Register X should halv value 0xAC")
+	}
+}
+
 func TestLoadImmediateYOpcodeExecution(t *testing.T) {
 	mem := mem.Make(1)
 	c := Make(mem)
@@ -108,5 +162,17 @@ func TestLoadImmediateYOpcodeExecution(t *testing.T) {
 	}
 	if c.pc != 0x202 {
 		t.Fatal("Program counter should hold position 0x202")
+	}
+}
+
+func TestLoadZeroPageYOpcodeExecution(t *testing.T) {
+	mem := mem.Make(1)
+	c := Make(mem)
+	mem.SetByte(0x200, 0xA4)
+	mem.SetByte(0x201, 0x1F)
+	mem.SetByte(0x1F, 0xEB)
+	c.exec()
+	if c.y != 0xEB {
+		t.Fatal("Register Y should have value 0xEB")
 	}
 }
