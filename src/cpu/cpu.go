@@ -12,6 +12,9 @@ const (
 	pageOneBegin  = 0x0100
 	pageOneEnd    = 0x01FF
 	pageTwoBegin  = 0x0200
+
+	negativeFlagMask = 0x80
+	zeroFlagMask     = 0x02
 )
 
 /*
@@ -109,4 +112,28 @@ RunOnce - Runs one iteration resetting PC to 0x00
 func (c *CPU) RunOnce() {
 	c.pc = pageTwoBegin
 	c.exec()
+}
+
+/*
+setZeroFlag - Sets the zero flag in flags register
+*/
+func (c *CPU) setZeroFlag() {
+	c.p |= zeroFlagMask
+}
+
+/*
+setNegativeFlag - Sets the negative flag in flags register
+*/
+func (c *CPU) setNegativeFlag() {
+	c.p |= negativeFlagMask
+}
+
+/*
+setRegister - Put byte value in given reference register
+*/
+func (c *CPU) setRegister(reg *byte, val byte) {
+	if val == 0x00 {
+		c.setZeroFlag()
+	}
+	*reg = val
 }

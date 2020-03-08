@@ -42,3 +42,50 @@ func TestCPUHasInitializedFlags(t *testing.T) {
 		t.Fatal("CPU should have IRQ initialized to 0")
 	}
 }
+
+func TestSetZeroFlag(t *testing.T) {
+	c := Make(nil)
+	c.setZeroFlag()
+	if c.p != 0x02 {
+		t.Fatal("Flags register should be 00000010")
+	}
+}
+
+func TestSetNegativeFlag(t *testing.T) {
+	c := Make(nil)
+	c.setNegativeFlag()
+	if c.p != 0x80 {
+		t.Fatal("Flags register should be 10000000")
+	}
+}
+
+func TestSetNegativeAndZeroFlag(t *testing.T) {
+	c := Make(nil)
+	c.setNegativeFlag()
+	c.setZeroFlag()
+	if c.p != 0x82 {
+		t.Fatal("Flags register should be 10000010")
+	}
+}
+
+func TestSetRegister(t *testing.T) {
+	c := Make(nil)
+	c.setRegister(&c.x, 0xFF)
+	if c.x != 0xFF {
+		t.Fatal("Register X should be 0xFF")
+	}
+	if c.p != 0x00 {
+		t.Fatal("Flags register should remain 00000000")
+	}
+}
+
+func TestSetRegisterRaiseZeroFlag(t *testing.T) {
+	c := Make(nil)
+	c.setRegister(&c.a, 0x00)
+	if c.a != 0x00 {
+		t.Fatal("Accumulator should be 0x00")
+	}
+	if c.p != 0x02 {
+		t.Fatal("Flags register should be 00000010")
+	}
+}
