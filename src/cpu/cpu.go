@@ -45,69 +45,6 @@ func Make(mem *mem.Mem) *CPU {
 }
 
 /*
-LoadImmediateA sets a numeric value into accumulator register
-*/
-func (c *CPU) LoadImmediateA(b byte) {
-	c.a = b
-}
-
-/*
-LoadZeroPageA loads accoumulator from zero page address
-*/
-func (c *CPU) LoadZeroPageA(b byte) {
-	c.a = c.mem.ReadByte(uint16(b))
-}
-
-/*
-LoadAbsoluteA loads accumulator from absoulte 16bit address
-*/
-func (c *CPU) LoadAbsoluteA(addr uint16) {
-	c.a = c.mem.ReadByte(addr)
-}
-
-/*
-LoadImmediateX sets numeric value into index register X
-*/
-func (c *CPU) LoadImmediateX(b byte) {
-	c.x = b
-}
-
-/*
-LoadZeroPageX sets in register X value from zero page address
-*/
-func (c *CPU) LoadZeroPageX(b byte) {
-	c.x = c.mem.ReadByte(uint16(b))
-}
-
-/*
-LoadAbsoluteX sets in register X value from absolute 16bit address
-*/
-func (c *CPU) LoadAbsoluteX(addr uint16) {
-	c.x = c.mem.ReadByte(addr)
-}
-
-/*
-LoadImmediateY sets numeric value into index register Y
-*/
-func (c *CPU) LoadImmediateY(b byte) {
-	c.y = b
-}
-
-/*
-LoadZeroPageY sets in register Y value from zero page address
-*/
-func (c *CPU) LoadZeroPageY(b byte) {
-	c.y = c.mem.ReadByte(uint16(b))
-}
-
-/*
-LoadAbsoluteY sets in register Y value from absolute 16bit address
-*/
-func (c *CPU) LoadAbsoluteY(addr uint16) {
-	c.y = c.mem.ReadByte(addr)
-}
-
-/*
 exec parses opcode and executes instruction at current PC position
 */
 func (c *CPU) exec() {
@@ -133,6 +70,15 @@ func (c *CPU) exec() {
 	case OpLoadYZP:
 		val := c.getNextByte()
 		c.LoadZeroPageY(val)
+	case OpLoadAAbs:
+		val := c.getNextWord()
+		c.LoadAbsoluteA(val)
+	case OpLoadXAbs:
+		val := c.getNextWord()
+		c.LoadAbsoluteX(val)
+	case OpLoadYAbs:
+		val := c.getNextWord()
+		c.LoadAbsoluteY(val)
 	default:
 		panic(fmt.Sprintf("Invalid opcode [%#X] found at %#X!!", opcode, currentPos))
 	}
@@ -145,6 +91,16 @@ func (c *CPU) getNextByte() byte {
 	b := c.mem.ReadByte(c.pc)
 	c.pc++
 	return b
+}
+
+/*
+getNextWord - Gets current 16bit word from PC position
+*/
+func (c *CPU) getNextWord() uint16 {
+	low := uint16(c.getNextByte())
+	high := uint16(c.getNextByte()) << 8
+
+	return high | low
 }
 
 /*
