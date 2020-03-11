@@ -1,5 +1,7 @@
 package cpu
 
+import "fmt"
+
 //========================================================================
 // This file contains implementation of LOAD instructions
 //========================================================================
@@ -36,6 +38,15 @@ func (c *CPU) LoadAbsoluteA(addr uint16) {
 }
 
 /*
+LoadAbsoluteXA loads accumulator from X-indexed 16bit address
+*/
+func (c *CPU) LoadAbsoluteXA(addr uint16) {
+	val := c.mem.ReadByte(addr + uint16(c.x))
+	fmt.Println(val)
+	c.setRegister(&c.a, val)
+}
+
+/*
 LoadImmediateX sets numeric value into index register X
 */
 func (c *CPU) LoadImmediateX(b byte) {
@@ -67,6 +78,14 @@ func (c *CPU) LoadAbsoluteX(addr uint16) {
 }
 
 /*
+LoadAbsoluteYX sets in register X value from Y-indexed absolute 16b address
+*/
+func (c *CPU) LoadAbsoluteYX(addr uint16) {
+	val := c.mem.ReadByte(addr + uint16(c.y))
+	c.setRegister(&c.x, val)
+}
+
+/*
 LoadImmediateY sets numeric value into index register Y
 */
 func (c *CPU) LoadImmediateY(b byte) {
@@ -94,5 +113,13 @@ LoadAbsoluteY sets in register Y value from absolute 16bit address
 */
 func (c *CPU) LoadAbsoluteY(addr uint16) {
 	val := c.mem.ReadByte(addr)
+	c.setRegister(&c.y, val)
+}
+
+/*
+LoadAbsoluteXY sets in register Y value from X-indexed absolute 16b address
+*/
+func (c *CPU) LoadAbsoluteXY(addr uint16) {
+	val := c.mem.ReadByte(addr + uint16(c.x))
 	c.setRegister(&c.y, val)
 }

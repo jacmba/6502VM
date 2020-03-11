@@ -45,6 +45,17 @@ func TestLoadZeropageXA(t *testing.T) {
 	}
 }
 
+func TestLoadAbsoluteXA(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x1A0, 0xAA)
+	c.x = 0x05
+	c.LoadAbsoluteXA(0x19B)
+	if c.a != 0xAA {
+		t.Fatal("Accumulator should have 0xAA")
+	}
+}
+
 func TestLoadImmediateX(t *testing.T) {
 	c := Make(nil)
 	c.LoadImmediateX(0x07)
@@ -81,6 +92,17 @@ func TestLoadAbsoluteX(t *testing.T) {
 	c.LoadAbsoluteX(0x301)
 	if c.x != 0xAB {
 		t.Fatal("Register X should have value 0xAB")
+	}
+}
+
+func TestLoadAbsoluteYX(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x3B0, 0xBB)
+	c.y = 0x03
+	c.LoadAbsoluteYX(0x3AD)
+	if c.x != 0xBB {
+		t.Fatal("Register X should have value 0xBB")
 	}
 }
 
@@ -122,6 +144,21 @@ func TestLoadAbsoluteY(t *testing.T) {
 		t.Fatal("Register Y should have value 0xAC")
 	}
 }
+
+func TestLoadAbsoluteXY(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x2FF, 0xCC)
+	c.x = 0x0A
+	c.LoadAbsoluteXY(0x2F5)
+	if c.y != 0xCC {
+		t.Fatal("Register Y should have value 0xCC")
+	}
+}
+
+//==============================================================================
+// Opcode execution tests
+//==============================================================================
 
 func TestLoadImmediateAOpcodeExecution(t *testing.T) {
 	mem := mem.Make(1)
