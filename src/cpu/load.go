@@ -20,6 +20,14 @@ func (c *CPU) LoadZeroPageA(b byte) {
 }
 
 /*
+LoadZeroPageXA loads into accumulator byte from address + X reg value
+*/
+func (c *CPU) LoadZeroPageXA(b byte) {
+	val := c.mem.ReadByte(uint16(b) + uint16(c.x))
+	c.setRegister(&c.a, val)
+}
+
+/*
 LoadAbsoluteA loads accumulator from absoulte 16bit address
 */
 func (c *CPU) LoadAbsoluteA(addr uint16) {
@@ -43,6 +51,14 @@ func (c *CPU) LoadZeroPageX(b byte) {
 }
 
 /*
+LoadZeroPageYX sets in register X Y-indexed value fom zeropage address
+*/
+func (c *CPU) LoadZeroPageYX(b byte) {
+	val := c.mem.ReadByte(uint16(b) + uint16(c.y))
+	c.setRegister(&c.x, val)
+}
+
+/*
 LoadAbsoluteX sets in register X value from absolute 16bit address
 */
 func (c *CPU) LoadAbsoluteX(addr uint16) {
@@ -62,6 +78,14 @@ LoadZeroPageY sets in register Y value from zero page address
 */
 func (c *CPU) LoadZeroPageY(b byte) {
 	val := c.mem.ReadByte(uint16(b))
+	c.setRegister(&c.y, val)
+}
+
+/*
+LoadZeroPageXY sets in register Y X-indexed value from zeropage address
+*/
+func (c *CPU) LoadZeroPageXY(b byte) {
+	val := c.mem.ReadByte(uint16(b) + uint16(c.x))
 	c.setRegister(&c.y, val)
 }
 
