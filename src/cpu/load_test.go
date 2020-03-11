@@ -186,6 +186,19 @@ func TestLoadZeroPageAOpcodeExecution(t *testing.T) {
 	}
 }
 
+func TestLoadZeropageXAOpcodeExecution(t *testing.T) {
+	mem := mem.Make(1)
+	c := Make(mem)
+	mem.SetByte(0x200, 0xB5)
+	mem.SetByte(0x201, 0xAA)
+	mem.SetByte(0xAB, 0xFA)
+	c.x = 0x01
+	c.exec()
+	if c.a != 0xFA {
+		t.Fatal("Accumulator should have value 0xFA")
+	}
+}
+
 func TestLoadAbsoluteAOpcodeExecution(t *testing.T) {
 	mem := mem.Make(1)
 	c := Make(mem)
@@ -195,7 +208,21 @@ func TestLoadAbsoluteAOpcodeExecution(t *testing.T) {
 	mem.SetByte(0x1CC, 0xFB)
 	c.exec()
 	if c.a != 0xFB {
-		t.Fatal("Accumulator should hae value 0xFB")
+		t.Fatal("Accumulator should have value 0xFB")
+	}
+}
+
+func TestLoadAbsoluteXAOpcodeExecution(t *testing.T) {
+	mem := mem.Make(1)
+	c := Make(mem)
+	mem.SetByte(0x200, 0xBD)
+	mem.SetByte(0x201, 0xA8)
+	mem.SetByte(0x202, 0x01)
+	mem.SetByte(0x1AA, 0xA1)
+	c.x = 0x02
+	c.exec()
+	if c.a != 0xA1 {
+		t.Fatal("Accumulator should have value 0xA1")
 	}
 }
 
@@ -225,6 +252,19 @@ func TestLoadZeropageXOpcodeExecution(t *testing.T) {
 	}
 }
 
+func TestLoadZeropageYXOpcodeExecution(t *testing.T) {
+	mem := mem.Make(1)
+	c := Make(mem)
+	mem.SetByte(0x200, 0xB6)
+	mem.SetByte(0x201, 0xBB)
+	mem.SetByte(0xBC, 0xFB)
+	c.y = 0x01
+	c.exec()
+	if c.x != 0xFB {
+		t.Fatal("Register X should have value 0xFB")
+	}
+}
+
 func TestLoadAbsoluteXOpcodeExecution(t *testing.T) {
 	mem := mem.Make(1)
 	c := Make(mem)
@@ -235,6 +275,20 @@ func TestLoadAbsoluteXOpcodeExecution(t *testing.T) {
 	c.exec()
 	if c.x != 0xFC {
 		t.Fatal("Register X should have value 0xFC")
+	}
+}
+
+func TestLoadAbsoluteYXOpcodeExecution(t *testing.T) {
+	mem := mem.Make(1)
+	c := Make(mem)
+	mem.SetByte(0x200, 0xBE)
+	mem.SetByte(0x201, 0xBB)
+	mem.SetByte(0x202, 0x01)
+	mem.SetByte(0x01BC, 0xBB)
+	c.y = 0x01
+	c.exec()
+	if c.x != 0xBB {
+		t.Fatal("Register X should have value 0xBB")
 	}
 }
 
@@ -264,6 +318,19 @@ func TestLoadZeroPageYOpcodeExecution(t *testing.T) {
 	}
 }
 
+func TestLoadZeropageXYOpcodeExecution(t *testing.T) {
+	mem := mem.Make(1)
+	c := Make(mem)
+	mem.SetByte(0x200, 0xB4)
+	mem.SetByte(0x201, 0xCC)
+	mem.SetByte(0xCD, 0xFF)
+	c.x = 0x01
+	c.exec()
+	if c.y != 0xFF {
+		t.Fatal("Register Y should have value 0xFF")
+	}
+}
+
 func TestLoadAbsoluteYOpcodeExecution(t *testing.T) {
 	mem := mem.Make(1)
 	c := Make(mem)
@@ -274,5 +341,19 @@ func TestLoadAbsoluteYOpcodeExecution(t *testing.T) {
 	c.exec()
 	if c.y != 0xEC {
 		t.Fatal("Register Y should have value 0xEC")
+	}
+}
+
+func TestLoadAbsoluteXYOpcodeExecution(t *testing.T) {
+	mem := mem.Make(1)
+	c := Make(mem)
+	mem.SetByte(0x200, 0xBC)
+	mem.SetByte(0x201, 0xCC)
+	mem.SetByte(0x202, 0x01)
+	mem.SetByte(0x01CF, 0xCA)
+	c.x = 0x03
+	c.exec()
+	if c.y != 0xCA {
+		t.Fatal("Register Y should have value 0xCA")
 	}
 }
