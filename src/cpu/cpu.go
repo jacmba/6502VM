@@ -100,6 +100,12 @@ func (c *CPU) exec() {
 	case OpLoadXYAbs:
 		val := c.getNextWord()
 		c.LoadAbsoluteXY(val)
+	case OpLoadXIndirect:
+		val := c.getNextByte()
+		c.LoadIndirectX(val)
+	case OpLoadYIndirect:
+		val := c.getNextByte()
+		c.LoadIndirectY(val)
 	default:
 		panic(fmt.Sprintf("Invalid opcode [%#X] found at %#X!!", opcode, currentPos))
 	}

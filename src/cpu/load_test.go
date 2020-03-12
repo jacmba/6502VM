@@ -56,6 +56,32 @@ func TestLoadAbsoluteXA(t *testing.T) {
 	}
 }
 
+func TestLoadIndirectX(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0xFB, 0x00)
+	m.SetByte(0xFC, 0x01)
+	m.SetByte(0x100, 0xAA)
+	c.x = 0x01
+	c.LoadIndirectX(0xFA)
+	if c.a != 0xAA {
+		t.Fatal("Accumulator should have 0xAA")
+	}
+}
+
+func TestLoadIndirectY(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0xFE, 0xAA)
+	m.SetByte(0xFF, 0x01)
+	m.SetByte(0x1AF, 0xAB)
+	c.y = 0x05
+	c.LoadIndirectY(0x0FE)
+	if c.a != 0xAB {
+		t.Fatal("Accumulator should have 0xAB")
+	}
+}
+
 func TestLoadImmediateX(t *testing.T) {
 	c := Make(nil)
 	c.LoadImmediateX(0x07)
@@ -223,6 +249,36 @@ func TestLoadAbsoluteXAOpcodeExecution(t *testing.T) {
 	c.exec()
 	if c.a != 0xA1 {
 		t.Fatal("Accumulator should have value 0xA1")
+	}
+}
+
+func TestLoadIndirectXOpcodeExecution(t *testing.T) {
+	mem := mem.Make(1)
+	c := Make(mem)
+	mem.SetByte(0x200, 0xA1)
+	mem.SetByte(0x201, 0xFA)
+	mem.SetByte(0xFE, 0xFF)
+	mem.SetByte(0xFF, 0x01)
+	mem.SetByte(0x01FF, 0xAA)
+	c.x = 0x04
+	c.exec()
+	if c.a != 0xAA {
+		t.Fatal("Accumulator should have value 0xAA")
+	}
+}
+
+func TestLoadIndirectYOpcodeExecution(t *testing.T) {
+	mem := mem.Make(1)
+	c := Make(mem)
+	mem.SetByte(0x200, 0xB1)
+	mem.SetByte(0x201, 0x00)
+	mem.SetByte(0x00, 0x00)
+	mem.SetByte(0x01, 0x01)
+	mem.SetByte(0x010E, 0xAB)
+	c.y = 0x0E
+	c.exec()
+	if c.a != 0xAB {
+		t.Fatal("Accumulator should have value 0xAB")
 	}
 }
 

@@ -1,7 +1,5 @@
 package cpu
 
-import "fmt"
-
 //========================================================================
 // This file contains implementation of LOAD instructions
 //========================================================================
@@ -42,7 +40,28 @@ LoadAbsoluteXA loads accumulator from X-indexed 16bit address
 */
 func (c *CPU) LoadAbsoluteXA(addr uint16) {
 	val := c.mem.ReadByte(addr + uint16(c.x))
-	fmt.Println(val)
+	c.setRegister(&c.a, val)
+}
+
+/*
+LoadIndirectX loads accumulator from address starting at address + X
+*/
+func (c *CPU) LoadIndirectX(addr byte) {
+	low := uint16(c.mem.ReadByte(uint16(addr) + uint16(c.x)))
+	high := uint16(c.mem.ReadByte(uint16(addr)+uint16(c.x)+1)) << 8
+	orig := high | low
+	val := c.mem.ReadByte(orig)
+	c.setRegister(&c.a, val)
+}
+
+/*
+LoadIndirectY loads accumulator from indirect address + Y
+*/
+func (c *CPU) LoadIndirectY(addr byte) {
+	low := uint16(c.mem.ReadByte(uint16(addr)))
+	high := uint16(c.mem.ReadByte(uint16(addr)+1)) << 8
+	orig := (high | low) + uint16(c.y)
+	val := c.mem.ReadByte(orig)
 	c.setRegister(&c.a, val)
 }
 
