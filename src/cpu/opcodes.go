@@ -19,6 +19,13 @@ const (
 	OpLoadXYAbs     = "OPCODE_LOAD_Y_INDEXED_ABSOLUTE"
 	OpLoadXIndirect = "OPCODE_LOAD_X_INDIRECT"
 	OpLoadYIndirect = "OPCODE_LOAD_Y_INDIRECT"
+
+	OpStoreAZP  = "OPCODE_STORE_A_ZEROPAGE"
+	OpStoreXZP  = "OPCODE_STORE_X_ZEROPAGE"
+	OpStoreYZP  = "OPCODE_STORE_Y_ZEROPAGE"
+	OpStoreIAZP = "OPCODE_STORE_A_INDEXED_ZEROPAGE"
+	OpStoreIXZP = "OPCODE_STORE_X_INDEXED_ZEROPAGE"
+	OpStoreIYZP = "OPCODE_STORE_Y_INDEXED_ZEROPAGE"
 )
 
 //OpcodeMap - map of Opcode HEX values
@@ -40,4 +47,11 @@ var OpcodeMap map[byte]string = map[byte]string{
 	0xBC: OpLoadXYAbs,
 	0xA1: OpLoadXIndirect,
 	0xB1: OpLoadYIndirect,
+
+	0x85: OpStoreAZP,
+	0x86: OpStoreXZP,
+	0x84: OpStoreYZP,
+	0x95: OpStoreIAZP,
+	0x96: OpStoreIXZP,
+	0x94: OpStoreIYZP,
 }

@@ -55,6 +55,10 @@ func (c *CPU) exec() {
 	opcode := c.getNextByte()
 
 	switch OpcodeMap[opcode] {
+
+	//============================================================================
+	// Load opcodes
+	//============================================================================
 	case OpLoadAI:
 		val := c.getNextByte()
 		c.LoadImmediateA(val)
@@ -106,6 +110,29 @@ func (c *CPU) exec() {
 	case OpLoadYIndirect:
 		val := c.getNextByte()
 		c.LoadIndirectY(val)
+
+	//============================================================================
+	// Store opcodes
+	//============================================================================
+	case OpStoreAZP:
+		addr := c.getNextByte()
+		c.StoreZeropageA(addr)
+	case OpStoreIAZP:
+		addr := c.getNextByte()
+		c.StoreZeropageIA(addr)
+	case OpStoreXZP:
+		addr := c.getNextByte()
+		c.StoreZeropageX(addr)
+	case OpStoreIXZP:
+		addr := c.getNextByte()
+		c.StoreZeropageIX(addr)
+	case OpStoreYZP:
+		addr := c.getNextByte()
+		c.StoreZeropageY(addr)
+	case OpStoreIYZP:
+		addr := c.getNextByte()
+		c.StoreZeropageIY(addr)
+
 	default:
 		panic(fmt.Sprintf("Invalid opcode [%#X] found at %#X!!", opcode, currentPos))
 	}
