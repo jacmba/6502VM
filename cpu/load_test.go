@@ -3,7 +3,7 @@ package cpu
 import (
 	"testing"
 
-	"../mem"
+	"6502VM/mem"
 )
 
 func TestLoadImmediateAccumulator(t *testing.T) {

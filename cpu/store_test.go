@@ -3,7 +3,7 @@ package cpu
 import (
 	"testing"
 
-	"../mem"
+	"6502VM/mem"
 )
 
 func TestStoreZeropageA(t *testing.T) {

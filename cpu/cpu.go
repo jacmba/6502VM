@@ -3,7 +3,7 @@ package cpu
 import (
 	"fmt"
 
-	"../mem"
+	"6502VM/mem"
 )
 
 const (

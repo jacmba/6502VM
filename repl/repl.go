@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"../cpu"
-	"../mem"
+	"6502VM/cpu"
+	"6502VM/mem"
 )
 
 /*

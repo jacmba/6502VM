@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./repl"
+	"6502VM/repl"
 )
 
 func main() {
