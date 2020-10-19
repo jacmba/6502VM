@@ -147,6 +147,12 @@ func (c *CPU) exec() {
 	case OpStoreYAbs:
 		addr := c.getNextWord()
 		c.StoreAbsoluteY(addr)
+	case OpStoreXIndirect:
+		addr := c.getNextByte()
+		c.StoreIndirectX(addr)
+	case OpStoreYIndirect:
+		addr := c.getNextByte()
+		c.StoreIndirectY(addr)
 
 	default:
 		panic(fmt.Sprintf("Invalid opcode [%#X] found at %#X!!", opcode, currentPos))

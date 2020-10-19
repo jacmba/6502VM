@@ -45,6 +45,27 @@ func (c *CPU) StoreAbsoluteYA(addr uint16) {
 }
 
 /*
+StoreIndirectX stores value from accumulator into absolute 16 bit address reffered by ZP address + X
+*/
+func (c *CPU) StoreIndirectX(addr byte) {
+	pointer := addr + c.x
+	lo := uint16(c.mem.ReadByte(uint16(pointer)))
+	hi := uint16(c.mem.ReadByte(uint16(pointer)+1)) << 8
+	dest := hi | lo
+	c.mem.SetByte(dest, c.a)
+}
+
+/*
+StoreIndirectY stores value from accumulator into absolute 16 bit address + Y reffered by ZP address
+*/
+func (c *CPU) StoreIndirectY(addr byte) {
+	lo := uint16(c.mem.ReadByte(uint16(addr)))
+	hi := uint16(c.mem.ReadByte(uint16(addr)+1)) << 8
+	dest := (hi | lo) + uint16(c.y)
+	c.mem.SetByte(dest, c.a)
+}
+
+/*
 StoreZeropageX stores value from register X into Zeropage 8bit address
 */
 func (c *CPU) StoreZeropageX(addr byte) {
