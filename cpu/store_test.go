@@ -29,6 +29,41 @@ func TestStoreZeropageIndexedA(t *testing.T) {
 	}
 }
 
+func TestStoreAbsoluteA(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	c.a = 0xAB
+	c.StoreAbsoluteA(0x1FF)
+	v := m.ReadByte(0x1FF)
+	if v != 0xAB {
+		t.Fatal("Address 0x1FF should have value 0xAB")
+	}
+}
+
+func TestStoreAbsoluteXA(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	c.a = 0xAC
+	c.x = 0x0F
+	c.StoreAbsoluteXA(0x100)
+	v := m.ReadByte(0x10F)
+	if v != 0xAC {
+		t.Fatal("Address 0x10F should have value 0xAC")
+	}
+}
+
+func TestStoreAbsoluteYA(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	c.a = 0xAD
+	c.y = 0x0F
+	c.StoreAbsoluteYA(0x110)
+	v := m.ReadByte(0x11F)
+	if v != 0xAD {
+		t.Fatal("Address 0x11F should have value 0xAD")
+	}
+}
+
 func TestStoreZeropageX(t *testing.T) {
 	m := mem.Make(1)
 	c := Make(m)
@@ -52,6 +87,17 @@ func TestStoreZeropageIndexedX(t *testing.T) {
 	}
 }
 
+func TestAbsoluteX(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	c.x = 0xBA
+	c.StoreAbsoluteX(0x1AA)
+	v := m.ReadByte(0x1AA)
+	if v != 0xBA {
+		t.Fatal("Address 0x1AA should have value 0xBA")
+	}
+}
+
 func TestStoreZeropageY(t *testing.T) {
 	m := mem.Make(1)
 	c := Make(m)
@@ -72,6 +118,17 @@ func TestStoreZeropageIndexedY(t *testing.T) {
 	v := m.ReadByte(0xFC)
 	if v != 0xCC {
 		t.Fatal("Address 0xFC should have value 0xCC")
+	}
+}
+
+func TestAbsoluteY(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	c.y = 0xCA
+	c.StoreAbsoluteY(0x1BB)
+	v := m.ReadByte(0x1BB)
+	if v != 0xCA {
+		t.Fatal("Address 0x1BB should have value 0xCA")
 	}
 }
 
@@ -106,6 +163,50 @@ func TestStoreZeropageIndexedAOpcodeExecution(t *testing.T) {
 	}
 }
 
+func TestStoreAAbsoluteOpcodeExecution(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x200, 0x8D)
+	m.SetByte(0x201, 0xFF)
+	m.SetByte(0x202, 0x01)
+	c.a = 0xAA
+	c.exec()
+	v := m.ReadByte(0x01FF)
+	if v != 0xAA {
+		t.Fatal("Address 0x01FF should have value 0xAA")
+	}
+}
+
+func TestStoreAAbsoluteXOpcodeExecution(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x200, 0x9D)
+	m.SetByte(0x201, 0xF0)
+	m.SetByte(0x202, 0x01)
+	c.a = 0xAA
+	c.x = 0x0F
+	c.exec()
+	v := m.ReadByte(0x01FF)
+	if v != 0xAA {
+		t.Fatal("Address 0x01FF should have value 0xAA")
+	}
+}
+
+func TestStoreAAbsoluteYOpcodeExecution(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x200, 0x99)
+	m.SetByte(0x201, 0xF0)
+	m.SetByte(0x202, 0x01)
+	c.a = 0xAA
+	c.y = 0x0F
+	c.exec()
+	v := m.ReadByte(0x01FF)
+	if v != 0xAA {
+		t.Fatal("Address 0x01FF should have value 0xAA")
+	}
+}
+
 func TestStoreZeropageXOpcodeExecution(t *testing.T) {
 	m := mem.Make(1)
 	c := Make(m)
@@ -133,6 +234,20 @@ func TestStoreZeropageIndexedXOpcodeExecution(t *testing.T) {
 	}
 }
 
+func TestStoreAbsoluteXOpcodeExecution(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x200, 0x8E)
+	m.SetByte(0x201, 0xBF)
+	m.SetByte(0x202, 0x01)
+	c.x = 0xBB
+	c.exec()
+	v := m.ReadByte(0x01BF)
+	if v != 0xBB {
+		t.Fatal("Address 0x01BF should have value 0xBB")
+	}
+}
+
 func TestStoreZeropageYOpcodeExecution(t *testing.T) {
 	m := mem.Make(1)
 	c := Make(m)
@@ -157,5 +272,19 @@ func TestStoreZeropageIndexedYOpcodeExecution(t *testing.T) {
 	v := m.ReadByte(0xFC)
 	if v != 0xCC {
 		t.Fatal("Address 0xFC should have value 0xCC")
+	}
+}
+
+func TestStoreAbsoluteYOpcodeExecution(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	m.SetByte(0x200, 0x8C)
+	m.SetByte(0x201, 0xAF)
+	m.SetByte(0x202, 0x01)
+	c.y = 0xCC
+	c.exec()
+	v := m.ReadByte(0x01AF)
+	if v != 0xCC {
+		t.Fatal("Address 0x01AF should have value 0xCC")
 	}
 }
