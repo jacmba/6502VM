@@ -62,3 +62,27 @@ func (c *CPU) AdcAbsoluteIndexedY(addr uint16) {
 	v := c.mem.ReadByte(addr + uint16(c.y))
 	c.add(v)
 }
+
+/*
+AdcIndirectX adds to accumulator value in 16 bit address referenced by zeropage given address + offset X
+*/
+func (c *CPU) AdcIndirectX(addr byte) {
+	pointer := uint16(addr + c.x)
+	lo := uint16(c.mem.ReadByte(pointer))
+	hi := uint16(c.mem.ReadByte(pointer+1)) << 8
+	dest := hi | lo
+	v := c.mem.ReadByte(dest)
+	c.add(v)
+}
+
+/*
+AdcIndirectY adds to accumulator value in 16 bit address + Y offset referenced by zeropage given address
+*/
+func (c *CPU) AdcIndirectY(addr byte) {
+	pointer := uint16(addr)
+	lo := uint16(c.mem.ReadByte(pointer))
+	hi := uint16(c.mem.ReadByte(pointer+1)) << 8
+	dest := (hi | lo) + uint16(c.y)
+	v := c.mem.ReadByte(dest)
+	c.add(v)
+}

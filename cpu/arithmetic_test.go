@@ -5,6 +5,10 @@ import (
 	"testing"
 )
 
+//--------------------------------------------------------------------------------------------------
+// Operations logic tests
+//--------------------------------------------------------------------------------------------------
+
 func TestAdcImmediate(t *testing.T) {
 	m := mem.Make(1)
 	c := Make(m)
@@ -70,5 +74,33 @@ func TestAdcAbsoluteIndexedY(t *testing.T) {
 	c.AdcAbsoluteIndexedY(0x0200)
 	if c.a != 0xBB {
 		t.Fatalf("Accumulator should have value 0xBB. Found %X\n", c.a)
+	}
+}
+
+func TestAdcIndirectX(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	c.a = 0x01
+	c.x = 0x0F
+	m.SetByte(0x1F, 0xAA)
+	m.SetByte(0x20, 0x02)
+	m.SetByte(0x02AA, 0x01)
+	c.AdcIndirectX(0x10)
+	if c.a != 0x02 {
+		t.Fatalf("Accumulator should have value 0x02. Found %X\n", c.a)
+	}
+}
+
+func TestAdcIndirectY(t *testing.T) {
+	m := mem.Make(1)
+	c := Make(m)
+	c.a = 0x04
+	c.y = 0xFF
+	m.SetByte(0x20, 0x00)
+	m.SetByte(0x21, 0x01)
+	m.SetByte(0x01FF, 0x04)
+	c.AdcIndirectY(0x20)
+	if c.a != 0x08 {
+		t.Fatalf("Accumulator should have value 0x02. Found %X\n", c.a)
 	}
 }
